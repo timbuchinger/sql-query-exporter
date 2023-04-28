@@ -19,23 +19,19 @@ def init_database():
 
     engine = sqlalchemy.create_engine("sqlite:///test.db")
     metadata = MetaData()
-    Metric.__table__.drop(engine)
+    exist = sqlalchemy.inspect(engine).has_table("Metric")
+    if exist == True:
+        Metric.__table__.drop(engine)
 
-    exist = sqlalchemy.inspect(engine).has_table("Metrics")
-    if exist == False:
-        print("=Table doesn't exist=")
-        metrics = Table(
-            "Metric",
-            metadata,
-            Column("id", Integer(), primary_key=True),
-            Column("name", String(200), nullable=False),
-            Column("value", Integer()),
-        )
-        metadata.create_all(engine)
-        print("=Table was created=")
-
+    Table(
+        "Metric",
+        metadata,
+        Column("id", Integer(), primary_key=True),
+        Column("name", String(200), nullable=False),
+        Column("value", Integer()),
+    )
+    metadata.create_all(engine)
     Base.metadata.create_all(engine)
-    # sa.create_all()
 
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -46,5 +42,3 @@ def init_database():
     session.commit()
 
     yield
-
-    # sqlalchemy.drop_all()
