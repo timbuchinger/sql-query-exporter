@@ -1,0 +1,14 @@
+---
+connections:
+- name: test_connection
+  connectionString: 'sqlite:///test.db'
+  queries:
+  - name: test_query
+    type: Gauge
+    helpText: "Test Gauge"
+    valueColumn: Total
+    labelColumns:
+    - value
+    query: |
+      SELECT sum([value]) AS [Total], [Name] FROM [Metric] GROUP BY [Name]
+
