@@ -10,7 +10,7 @@ on:
     #     default: 'false'
 
 jobs:
-  build-flask-app:
+  build-app:
     runs-on: ubuntu-latest
     # services:
     #   mariadb:
