@@ -76,7 +76,8 @@ jobs:
 
       - name: pytest - SQLite
         run: |
-          python -m pytest
+          python -m pytest --cov-report term-missing --cov=project
+        # coverage: '/^TOTAL.+?(\d+\%)$/'
 
       # - name: pytest - MariaDB
       #   run: |
@@ -93,10 +94,8 @@ jobs:
       #     DATABASE_URL: 'postgresql+psycopg2://postgres:postgres@localhost:5432/test_db'
       #     PGPASSWORD: postgres
 
-      - name: pytest coverage
-        run: |
-          python -m pytest --cov-report term-missing --cov=project
-        # coverage: '/^TOTAL.+?(\d+\%)$/'
+
+
 
       # - name: Lint with ruff
       #   run: |

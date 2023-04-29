@@ -1,4 +1,4 @@
-# sql-query-exporter
+# Prometheus SQL Query Exporter
 
 ## Features
 
