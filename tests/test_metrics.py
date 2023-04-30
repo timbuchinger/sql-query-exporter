@@ -15,7 +15,9 @@ def test_metrics(init_database):
     """
     import project.main
 
-    test = REGISTRY.get_sample_value("test_query")  # , dict(Name="test"))
-    assert test == 4
-    # test2 = REGISTRY.get_sample_value("test_query"), dict(Name="test2"))
-    # assert test2 == 12
+    actual = REGISTRY.get_sample_value("test_query", dict(Name="test1", Label="label1"))
+    assert actual == 1.0
+    actual = REGISTRY.get_sample_value("test_query", dict(Name="test1", Label="label2"))
+    assert actual == 6.0
+    actual = REGISTRY.get_sample_value("test_query", dict(Name="test2", Label="label3"))
+    assert actual == 12.0

@@ -3,7 +3,6 @@ import sqlalchemy
 import yaml
 from prometheus_client import start_http_server
 from prometheus_client.core import REGISTRY, GaugeMetricFamily
-from models import *
 from project.models import *
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
@@ -21,20 +20,25 @@ class CustomCollector(object):
             Session = sessionmaker(engine)
             with Session() as session:
                 for query in connection.queries:
-                    print(query.name)
-                    print(query.query)
-                    print(query.label_columns)
-
                     result = session.execute(text(query.query)).fetchall()
-                    print(result)
 
                     for row in result:
                         if query.metric_type.lower() == "gauge":
-                            yield GaugeMetricFamily(
+                            g = GaugeMetricFamily(
                                 query.name,
                                 query.help_text,
-                                value=row._mapping[query.value_column],
+                                labels=query.label_columns,
                             )
+                            labels = dict()
+                            for label_column in query.label_columns[0]:
+                                labels[label_column] = row._mapping[label_column]
+
+                            g.add_sample(
+                                name=query.name,
+                                value=row._mapping[query.value_column],
+                                labels=labels,
+                            )
+                            yield g
                         elif query.metric_type.lower() == "counter":
                             pass
                             # c = CounterMetricFamily("my_counter_total", "Help text", labels=["foo"])
@@ -45,10 +49,8 @@ class CustomCollector(object):
 
 with open(config_file, mode="rb") as file:
     raw = yaml.safe_load(file)
-    print(raw)
     connections = []
     for connection in raw["connections"]:
-        print(connection["name"])
         queries = []
         for query in connection["queries"]:
             queries.append(
@@ -60,17 +62,12 @@ with open(config_file, mode="rb") as file:
                     query["labelColumns"],
                 )
             )
-            print(query["name"])
-            print(query["query"])
         connections.append(
             Connection(connection["name"], connection["connectionString"], queries)
         )
 
     global config
     config = Config(connections)
-
-
-print(config)
 
 
 REGISTRY.register(CustomCollector(config))

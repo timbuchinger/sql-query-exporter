@@ -1,13 +1,12 @@
 from sqlalchemy import Column
-import sqlalchemy
 from sqlalchemy.types import Integer, String
-
-Base = sqlalchemy.orm.declarative_base()
+from conftest import Base
 
 
 class Metric(Base):
     __tablename__ = "Metric"
 
-    id = Column(Integer, primary_key=True, autoincrement="auto")
-    name = Column(String(255), unique=True, nullable=False)
-    value = Column(Integer, nullable=False)
+    ID = Column(Integer, primary_key=True, autoincrement="auto")
+    Name = Column(String(255), nullable=False)
+    Label = Column(String(255), nullable=False)
+    Value = Column(Integer, nullable=False)

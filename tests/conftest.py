@@ -1,9 +1,7 @@
 import os
 import pytest
-from sqlalchemy import MetaData, Table
-from sqlalchemy import Column
+from sqlalchemy import MetaData
 import sqlalchemy
-from sqlalchemy.types import Integer, String
 from sqlalchemy.orm import sessionmaker
 
 
@@ -23,22 +21,15 @@ def init_database():
     if exist == True:
         Metric.__table__.drop(engine)
 
-    Table(
-        "Metric",
-        metadata,
-        Column("id", Integer(), primary_key=True),
-        Column("name", String(200), nullable=False),
-        Column("value", Integer()),
-    )
-    metadata.create_all(engine)
-    Base.metadata.create_all(engine)
+    metadata.create_all(engine, tables=[Metric.__table__])
 
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    session.add(Metric(name="test", value=1))
-    session.add(Metric(name="test", value=3))
-    session.add(Metric(name="test2", value=12))
+    session.add(Metric(Name="test1", Label="label1", Value=1))
+    session.add(Metric(Name="test1", Label="label2", Value=3))
+    session.add(Metric(Name="test1", Label="label2", Value=3))
+    session.add(Metric(Name="test2", Label="label3", Value=12))
     session.commit()
 
     yield

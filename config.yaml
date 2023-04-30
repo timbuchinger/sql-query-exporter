@@ -8,6 +8,7 @@ connections:
     helpText: "Test Gauge"
     valueColumn: Total
     labelColumns:
-    - value
+    - Name
+    - Label
     query: |
-      SELECT sum([value]) AS [Total], [Name] FROM [Metric] GROUP BY [Name]
+      SELECT sum([value]) AS [Total], [Name], [Label] FROM [Metric] GROUP BY [Name], [Label]

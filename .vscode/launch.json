@@ -11,7 +11,16 @@
       "program": "${file}",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "env": {"PYTHONPATH": "${workspaceFolder}/project/"}
+      "env": {"PYTHONPATH": "${workspaceFolder}/"}
+    },
+    {
+      "name": "Python: main.py",
+      "type": "python",
+      "request": "launch",
+      "program": "project/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "env": {"PYTHONPATH": "${workspaceFolder}/"}
     },
     {
       "name": "Python: Test debug config",

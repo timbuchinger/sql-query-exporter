@@ -94,8 +94,10 @@ jobs:
       #     DATABASE_URL: 'postgresql+psycopg2://postgres:postgres@localhost:5432/test_db'
       #     PGPASSWORD: postgres
 
-
-
+      - name: Black
+        run: |
+          black --version
+          black project/ main.py --check
 
       # - name: Lint with ruff
       #   run: |
